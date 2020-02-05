@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: max05200520
+    ports:
+      - "2001:5433"
+  web:
+    container_name: WiEnglish
+    build: .
+    ports:
+      - "2000:2000"
+    volumes:
+      - ./web:/app
+    depends_on:
+      - db

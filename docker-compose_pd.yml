@@ -1,0 +1,20 @@
+version: '3'
+services:
+  ezgo-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: max05200520
+    ports:
+      - "2001:5433"
+  ezgo-web:
+    container_name: WiEnglish
+    build:
+      context: .
+      dockerfile: Dockerfile_pd
+    ports:
+      - "2000:2000"
+    depends_on:
+      - ezgo-db
+    volumes:
+      - ./web:/app
