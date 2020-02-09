@@ -28,8 +28,8 @@ DEBUG = True
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
     # todo 之後要加入回來
-    'DEFAULT_AUTHENTICATION_CLASSES': ('api.authentication.TokenAuthentication',),
-    'DEFAULT_PERMISSION_CLASSES': ('api.permissions.DefaultIsAuthenticated',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (),
+    'DEFAULT_PERMISSION_CLASSES': (),
 }
 
 # Application definition

@@ -11,18 +11,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_nested import routers
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import (BannerContent, Banner, File, Permission, Manager, AdminTokens, Member, Category, Tag, Brand,
-                     Product,
-                     ProductImage, Cart, ProductQuitShot, TagImage)
-from .serializers import (BannerSerializer, FileSerializer, PermissionSerializer, ManagerSerializer,
-                          ManagerLoginSerializer,
-                          MemberSerializer, CategorySerializer, TagSerializer, BrandSerializer, ProductSerializer,
-                          CartSerializer, ProductQuitShotSerializer, TagImageSerializer, TagListSerializer,
-                          ProductListSerializer)
 from . import permissions
 from . import serializers
 # todo 之後要加入回來
-from .authentication import TokenAuthentication, MemberAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .viewlib import (List2RetrieveMixin, NestedViewSetBase)
 from collections import OrderedDict

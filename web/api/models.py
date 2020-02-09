@@ -59,11 +59,12 @@ class DefaultAbstract(models.Model):
 
 
 class Word(DefaultAbstract):
-    english = models.CharField(max_length=128, help_text='', null=True)
+    english = models.CharField(max_length=128, help_text='', null=True, unique=True)
     chinese = models.CharField(max_length=128, help_text='may many use,', null=True)
     word_type = models.CharField(max_length=128, help_text='', null=True)
-    synonyms = models.ManyToManyField('Word', related_name='+', help_text='同義詞')
-    antonym = models.ManyToManyField('Word', related_name='+', help_text='反義詞')
+    synonyms = models.ManyToManyField('Word', related_name='word_synonyms', help_text='同義詞')
+    antonym = models.ManyToManyField('Word', related_name='word_antonym', help_text='反義詞')
+    from_search = models.BooleanField(default=False)
 
 
 class Explain(DefaultAbstract):
@@ -72,6 +73,8 @@ class Explain(DefaultAbstract):
 
 class Sentence(DefaultAbstract):
     word = models.ForeignKey(Word, related_name='sentence', help_text='', on_delete=models.CASCADE)
+    english = models.CharField(max_length=256, help_text='', null=True)
+    chinese = models.CharField(max_length=256, help_text='may many use,', null=True)
 
 
 class Exam(DefaultAbstract):

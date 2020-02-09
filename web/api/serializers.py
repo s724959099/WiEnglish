@@ -9,9 +9,6 @@ import datetime
 from rest_framework.validators import UniqueValidator
 from django.http.request import QueryDict
 # check admin
-from .models import (BannerContent, Banner, File, Permission, Manager, AdminTokens, Member, Brand, Product,
-                     Specification, MemberTokens, Order, MemberStore,
-                     ProductImage, Category, Tag, TagImage, Cart, ProductQuitShot)
 from django.utils.functional import cached_property
 from rest_framework.utils.serializer_helpers import BindingDict
 from django.utils import timezone

@@ -45,7 +45,7 @@ class Crawler(Spider):
 
 
 if __name__ == '__main__':
-    from web.tools import log
+    from tools import log
 
     log.initlog('DEMO', level=logging.DEBUG, debug=True)
     c = Crawler()
