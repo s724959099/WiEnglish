@@ -38,6 +38,10 @@ class Crawler(Spider):
         for word in self.words:
             self.add_task(self.index_page, word)
 
+    async def find_synonyms_and_antonyms(self, word):
+        url = f'https://www.thesaurus.com/browse/{word}'
+        return await self.async_crawl(url)
+
     async def index_page(self, word):
         """
         todo 不做任何的確認 應該要在之前就先確認
@@ -46,13 +50,44 @@ class Crawler(Spider):
         r = await self.async_crawl(url)
         doc = str(r.content, encoding='utf-8', errors='ignore')
         dom = pq(doc)
-        instance = self.models.Word.objects.create(
-            english=word,
-            chinese=dom('.def-body > .trans').text(),
-            word_type=dom('span.pos').text(),
-        )
+        if self.models.Word.objects.filter(english=word).count():
+            instance = self.models.Word.objects.filter(english=word).first()
+        else:
+            instance = self.models.Word.objects.create(
+                english=word,
+                chinese=dom('.def-body > .trans').text(),
+                word_type=dom('span.pos').text(),
+            )
+        r = await self.find_synonyms_and_antonyms(word)
+        dom = pq(r.text)
+        # synonyms
+        for el in dom('.css-1lc0dpe').eq(0)('li').items():
+            sub_word = el.text()
+            if self.models.Word.objects.filter(english=sub_word).count():
+                sub_instance = self.models.Word.objects.filter(english=sub_word).first()
+            else:
+                sub_instance = self.models.Word.objects.create(
+                    english=sub_word,
+                )
+            instance.synonyms.add(sub_instance)
+            sub_instance.synonyms.add(instance)
+            sub_instance.save()
+        # antonym
+        for el in dom('.css-1lc0dpe').eq(1)('li').items():
+            sub_word = el.text()
+            if self.models.Word.objects.filter(english=sub_word).count():
+                sub_instance = self.models.Word.objects.filter(english=sub_word).first()
+            else:
+                sub_instance = self.models.Word.objects.create(
+                    english=sub_word,
+                )
+            instance.antonym.add(sub_instance)
+            sub_instance.antonym.add(instance)
+            sub_instance.save()
+        instance.save()
         for el in dom('div.examp').items():
-            el('span.deg').text()
-            el('span.trans.hdb').text()
-
-        print()
+            self.models.Sentence.objects.create(
+                word=instance,
+                english=el('span.deg').text(),
+                chinese=el('span.trans.hdb').text()
+            )
